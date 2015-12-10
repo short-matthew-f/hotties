@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HottieSpottr</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+  <style>
+    .title {
+      text-align: center;
+      font-family: cursive;
+    }
+
+  </style>
+</head>
+<body ng-app="HottieSpottr">
+  <main ng-controller="SpottingController as spotCtrl">
+    <h4 class="title">
+      Welcome to HottieSpottr, your source of all the Hotties in NYC
+    </h4>
+
+    <form ng-submit="spotCtrl.createSpotting()">
+      <input placeholder="Location e.g. 8th and Broadway"
+        ng-model="spotCtrl.newSpotting.location"><br/>
+      <h5>Rating: {{spotCtrl.newSpotting.rating}}</h5>
+      <input type="range" min=0 max=11 value=6
+        ng-model="spotCtrl.newSpotting.rating">
+      <br/>
+      <textarea placeholder="What'd they look like?"
+        ng-model="spotCtrl.newSpotting.description"></textarea><br/>
+      <input type="submit">
+    </form>
+
+    <hr/>
+    <ul>
+      <li ng-repeat="spotting in spotCtrl.spottings">
+        I saw a {{spotting.rating}} at {{spotting.location}}, and OMG they {{spotting.description}}.
+
+        <button ng-click="spotCtrl.deleteSpotting(spotting)">
+          REMOVE this spotting
+        </button>
+        <button ng-click="spotCtrl.currentSpotting=spotting">
+          Change THIS spotting
+        </button>
+        <form ng-submit="spotCtrl.updateSpotting()"
+          ng-show="spotCtrl.currentSpotting==spotting">
+          <input placeholder="Location e.g. 8th and Broadway"
+            ng-model="spotCtrl.currentSpotting.location"><br/>
+          <h5>Rating: {{spotCtrl.currentSpotting.rating}}</h5>
+          <input type="range" min=0 max=11 value={{spotCtrl.currentSpotting.rating}}
+            ng-model="spotCtrl.currentSpotting.rating">
+          <br/>
+          <textarea placeholder="What'd they look like?"
+            ng-model="spotCtrl.currentSpotting.description"></textarea><br/>
+          <input type="submit">
+        </form>
+
+        <form ng-submit="spotCtrl.addCommentToSpotting(spotting)">
+          <input placeholder="comment"
+           ng-model="spotting.newComment.content">
+          <input placeholder="name"
+           ng-model="spotting.newComment.name">
+          <input type="submit">
+        </form>
+
+        <ul ng-show="spotting.comments.length > 0">
+          <li ng-repeat="comment in spotting.comments">
+            {{ comment.content }} - {{ comment.name }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
